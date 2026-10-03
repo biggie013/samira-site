@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Политика конфиденциальности — SAMIRA MAGERAMOVA</title>
+<meta name="description" content="Как студия перманентного макияжа SAMIRA MAGERAMOVA обрабатывает и защищает персональные данные клиентов в соответствии с 152-ФЗ «О персональных данных».">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#171717; --bg-2:#1F1F1F; --bg-3:#272727;
+    --ink:#FFFFFF; --ink-soft:rgba(255,255,255,0.85); --ink-faint:rgba(255,255,255,0.65);
+    --line:rgba(159,159,159,0.26);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Montserrat',sans-serif; font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:860px; margin:0 auto; padding:0 32px;}
+
+  /* header — same bar as the main site */
+  header{position:sticky; top:0; z-index:10; background:rgba(23,23,23,0.85); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);}
+  .topbar{max-width:1240px; margin:0 auto; padding:18px 32px; display:flex; align-items:center; justify-content:space-between; gap:16px;}
+  .logo{font-family:'Playfair Display',serif; font-size:21px; font-weight:600; letter-spacing:0.03em; text-transform:uppercase; white-space:nowrap;}
+  .back{display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border:1px solid rgba(255,255,255,0.45); border-radius:999px;
+    font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-soft); transition:border-color .3s, color .3s;}
+  .back:hover{border-color:#fff; color:#fff;}
+  .back svg{width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+
+  /* title block on the site's starry background */
+  .doc-hero{padding:34px 0 56px; border-bottom:1px solid var(--line); text-align:center;
+    background-color:#000;
+    background-image:
+      radial-gradient(1.4px 1.4px at 20% 30%, rgba(255,255,255,0.8) 50%, transparent 51%),
+      radial-gradient(1px 1px at 65% 15%, rgba(255,255,255,0.55) 50%, transparent 51%),
+      radial-gradient(1.4px 1.4px at 85% 60%, rgba(255,255,255,0.7) 50%, transparent 51%),
+      radial-gradient(1px 1px at 35% 75%, rgba(255,255,255,0.5) 50%, transparent 51%),
+      radial-gradient(1.8px 1.8px at 50% 45%, rgba(255,255,255,0.75) 50%, transparent 51%),
+      radial-gradient(1px 1px at 10% 85%, rgba(255,255,255,0.45) 50%, transparent 51%),
+      radial-gradient(1.4px 1.4px at 92% 25%, rgba(255,255,255,0.6) 50%, transparent 51%),
+      radial-gradient(1px 1px at 45% 10%, rgba(255,255,255,0.5) 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 75% 90%, rgba(255,255,255,0.55) 50%, transparent 51%),
+      radial-gradient(1px 1px at 5% 45%, rgba(255,255,255,0.45) 50%, transparent 51%);
+    background-size:300px 300px;}
+  .crumbs{text-align:left; font-size:13px; color:var(--ink-faint);}
+  .crumbs a{color:var(--ink-faint); transition:color .25s;}
+  .crumbs a:hover{color:#fff;}
+  .crumbs span{margin:0 8px; opacity:.6;}
+  .crumbs b{font-weight:500; color:var(--ink-soft);}
+  .eyebrow{display:inline-flex; align-items:center; gap:12px; margin-top:44px; font-size:12px; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#fff;}
+  .eyebrow::before, .eyebrow::after{content:""; width:30px; height:1px; background:#fff;}
+  h1{margin:16px 0 0; font-family:'Playfair Display',serif; font-style:italic; font-weight:500; font-size:clamp(34px,5.4vw,58px); line-height:1.1;}
+  .lead{max-width:620px; margin:18px auto 0; font-size:16px; color:var(--ink-soft);}
+
+  main{padding:48px 0 90px;}
+  .edition{padding-bottom:28px; border-bottom:1px solid var(--line); color:var(--ink-soft);}
+  .edition strong{display:block; color:#fff; font-weight:600;}
+
+  /* table of contents */
+  .toc{margin:34px 0 10px; padding:28px 32px; background:var(--bg-2); border:1px solid var(--line); border-radius:20px;}
+  .toc-title{font-size:12.5px; font-weight:700; letter-spacing:0.28em; text-transform:uppercase; color:var(--ink-faint);}
+  .toc ol{margin:16px 0 0; padding-left:22px; columns:2; column-gap:40px;}
+  .toc li{margin:6px 0; break-inside:avoid; color:var(--ink-faint);}
+  .toc a{color:var(--ink-soft); border-bottom:1px solid rgba(255,255,255,0.3); transition:color .25s, border-color .25s;}
+  .toc a:hover{color:#fff; border-color:#fff;}
+
+  section{padding-top:38px; scroll-margin-top:90px;}
+  h2{display:flex; align-items:baseline; gap:14px; margin:0 0 16px; font-size:clamp(21px,2.4vw,25px); font-weight:600; line-height:1.3;}
+  h2 .num{font-family:'Playfair Display',serif; font-style:italic; font-weight:500; font-size:1.2em; color:var(--ink-faint);}
+  p{margin:0 0 14px; color:var(--ink-soft);}
+  ul{margin:0 0 16px; padding:0; list-style:none;}
+  ul li{position:relative; padding-left:24px; margin:8px 0; color:var(--ink-soft);}
+  ul li::before{content:"✦"; position:absolute; left:0; top:0; font-size:11px; color:#fff;}
+  dl.terms{margin:0;}
+  dl.terms dt{margin-top:14px; font-weight:600; color:#fff;}
+  dl.terms dd{margin:4px 0 0; color:var(--ink-soft);}
+  .note{margin:18px 0 0; padding:18px 22px; border:1px solid var(--line); border-left:2px solid #fff; border-radius:12px; background:var(--bg-2); color:var(--ink-soft); font-size:15px;}
+
+  /* operator details */
+  .requisites{margin-top:56px; padding:32px; background:var(--bg-2); border:1px solid var(--line); border-radius:20px;}
+  .requisites h2{margin-bottom:8px;}
+  .req-row{display:grid; grid-template-columns:220px 1fr; gap:20px; padding:14px 0; border-bottom:1px solid var(--line);}
+  .req-row:last-child{border-bottom:none;}
+  .req-row dt{font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-faint); padding-top:3px;}
+  .req-row dd{margin:0; color:#fff;}
+  .req-row dd a{border-bottom:1px solid rgba(255,255,255,0.35);}
+  /* a value still to be filled in — deliberately easy to spot */
+  .todo{padding:1px 8px; border:1px dashed rgba(255,214,102,0.8); border-radius:6px; color:#FFD666; white-space:nowrap;}
+
+  footer{border-top:1px solid var(--line); background:#2a2a2a;}
+  .foot{max-width:1240px; margin:0 auto; padding:28px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:13px; color:var(--ink-faint);}
+  .foot a{border-bottom:1px solid rgba(255,255,255,0.3);}
+  .foot a:hover{color:#fff; border-color:#fff;}
+
+  @media(max-width:700px){
+    .toc ol{columns:1;}
+    .req-row{grid-template-columns:1fr; gap:4px;}
+  }
+  @media(max-width:600px){
+    .wrap{padding:0 20px;}
+    .topbar{padding:14px 20px;}
+    .logo{font-size:clamp(14px,4vw,17px); letter-spacing:0.02em;}
+    .back{padding:10px 14px; font-size:11.5px; letter-spacing:0.06em;}
+    .back span{display:none;}
+    .doc-hero{padding:24px 0 42px;}
+    .eyebrow{margin-top:32px; font-size:11.5px; letter-spacing:0.22em;}
+    main{padding:34px 0 70px;}
+    .toc{padding:22px 20px; border-radius:16px;}
+    .requisites{padding:24px 20px; border-radius:16px;}
+    .foot{padding:24px 20px; flex-direction:column; align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a class="logo" href="index.html">SAMIRA MAGERAMOVA</a>
+    <a class="back" href="index.html" aria-label="Вернуться на главную"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span>На главную</span></a>
+  </div>
+</header>
+
+<div class="doc-hero">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Навигация"><a href="index.html">Главная</a><span>/</span><b>Политика конфиденциальности</b></nav>
+    <div class="eyebrow">Юридическое</div>
+    <h1>Политика конфиденциальности</h1>
+    <p class="lead">Как студия перманентного макияжа SAMIRA MAGERAMOVA обрабатывает и защищает персональные данные клиентов в соответствии с Федеральным законом № 152-ФЗ «О персональных данных».</p>
+  </div>
+</div>
+
+<main>
+  <div class="wrap">
+    <div class="edition">
+      <strong>Редакция от 4 октября 2026 г.</strong>
+      Настоящая Политика распространяется на все сведения, которые Оператор может получить о посетителе сайта студии SAMIRA MAGERAMOVA (далее — «Сайт») и о клиенте при записи на процедуру.
+    </div>
+
+    <nav class="toc" aria-label="Содержание">
+      <div class="toc-title">Содержание</div>
+      <ol>
+        <li><a href="#s1">Общие положения</a></li>
+        <li><a href="#s2">Основные понятия</a></li>
+        <li><a href="#s3">Какие данные обрабатываются</a></li>
+        <li><a href="#s4">Цели и правовые основания</a></li>
+        <li><a href="#s5">Передача данных третьим лицам</a></li>
+        <li><a href="#s6">Сроки обработки и хранения</a></li>
+        <li><a href="#s7">Cookie и технические данные</a></li>
+        <li><a href="#s8">Защита персональных данных</a></li>
+        <li><a href="#s9">Права клиента и отзыв согласия</a></li>
+        <li><a href="#s10">Заключительные положения</a></li>
+      </ol>
+    </nav>
+
+    <section id="s1">
+      <h2><span class="num">1.</span>Общие положения</h2>
+      <p>1.1. Политика обработки персональных данных (далее — «Политика») разработана в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных» и определяет, как Оператор обрабатывает персональные данные и какие меры принимает для их защиты.</p>
+      <p>1.2. Оператором персональных данных является Магерамова Самира <span class="todo">[отчество]</span>, плательщик налога на профессиональный доход (самозанятая), оказывающая услуги перманентного макияжа, камуфляжа рубцов и ареол, удаления татуажа и обучения мастеров (далее — «Оператор», «студия»). Реквизиты Оператора приведены в конце документа.</p>
+      <p>1.3. Оператор считает своей главной задачей соблюдение прав и свобод человека при обработке его персональных данных, в том числе права на неприкосновенность частной жизни, личную и семейную тайну.</p>
+      <p>1.4. Отправляя форму на Сайте или записываясь на процедуру иным способом, клиент подтверждает, что ознакомился с Политикой и согласен с ней. Если клиент не согласен с условиями Политики, ему следует не передавать свои данные через Сайт.</p>
+    </section>
+
+    <section id="s2">
+      <h2><span class="num">2.</span>Основные понятия</h2>
+      <dl class="terms">
+        <dt>Персональные данные</dt>
+        <dd>любая информация, относящаяся прямо или косвенно к определённому или определяемому физическому лицу.</dd>
+        <dt>Обработка персональных данных</dt>
+        <dd>любое действие с персональными данными: сбор, запись, систематизация, хранение, уточнение, использование, передача, обезличивание, блокирование, удаление и уничтожение.</dd>
+        <dt>Оператор</dt>
+        <dd>лицо, которое организует и осуществляет обработку персональных данных и определяет её цели и состав данных.</dd>
+        <dt>Клиент (субъект персональных данных)</dt>
+        <dd>физическое лицо, которое пользуется Сайтом, записывается на процедуру или обучение и чьи данные обрабатываются.</dd>
+        <dt>Обезличивание</dt>
+        <dd>действия, после которых нельзя определить, какому конкретному человеку принадлежат данные, без дополнительной информации.</dd>
+      </dl>
+    </section>
+
+    <section id="s3">
+      <h2><span class="num">3.</span>Какие данные обрабатываются</h2>
+      <p>3.1. Через форму записи на Сайте, по телефону и в мессенджерах клиент сам сообщает Оператору:</p>
+      <ul>
+        <li>имя;</li>
+        <li>номер телефона;</li>
+        <li>выбранную процедуру, удобные дату и время визита;</li>
+        <li>при обращении в мессенджере — имя пользователя и сведения, которые клиент указал в переписке;</li>
+        <li>при заказе подарочного сертификата — данные, необходимые для его оформления и передачи.</li>
+      </ul>
+      <p>3.2. Сайт не собирает сведения о состоянии здоровья. Противопоказания к процедуре мастер уточняет лично в студии перед её проведением; такие сведения фиксируются только при наличии отдельного письменного согласия клиента и используются исключительно для безопасного выполнения процедуры.</p>
+      <p>3.3. Фото- и видеосъёмка результата для портфолио, социальных сетей и Сайта проводится и публикуется только с согласия клиента.</p>
+      <p>3.4. Оператор не запрашивает и не хранит данные банковских карт. Чеки за оказанные услуги формируются в приложении «Мой налог».</p>
+    </section>
+
+    <section id="s4">
+      <h2><span class="num">4.</span>Цели и правовые основания</h2>
+      <p>4.1. Персональные данные обрабатываются для того, чтобы:</p>
+      <ul>
+        <li>записать клиента на процедуру, консультацию, коррекцию или обучение;</li>
+        <li>связаться с клиентом, подтвердить или перенести время визита;</li>
+        <li>подобрать процедуру и безопасно её провести;</li>
+        <li>напомнить о коррекции и уходе после процедуры;</li>
+        <li>оформить и передать подарочный сертификат;</li>
+        <li>рассмотреть обращения, вопросы и отзывы;</li>
+        <li>выполнить требования закона, в том числе налогового.</li>
+      </ul>
+      <p>4.2. Правовые основания обработки: согласие клиента (ст. 6 и 9 152-ФЗ); заключение и исполнение договора на оказание услуг, стороной которого является клиент; требования законодательства Российской Федерации. Рекламные и информационные сообщения направляются только при наличии отдельного согласия клиента.</p>
+    </section>
+
+    <section id="s5">
+      <h2><span class="num">5.</span>Передача данных третьим лицам</h2>
+      <p>5.1. Оператор не продаёт персональные данные и не передаёт их третьим лицам, кроме случаев, когда это нужно для оказания услуги или предусмотрено законом:</p>
+      <ul>
+        <li>мессенджерам и операторам связи (WhatsApp, Telegram, сотовая связь) — когда клиент сам выбирает такой способ общения;</li>
+        <li>хостинг-провайдеру Сайта — обезличенные технические данные, необходимые для его работы;</li>
+        <li>государственным органам — по законному запросу в случаях, установленных законодательством РФ.</li>
+      </ul>
+      <p>5.2. Указанные лица обязаны соблюдать конфиденциальность полученных данных и использовать их только для тех целей, ради которых они переданы.</p>
+    </section>
+
+    <section id="s6">
+      <h2><span class="num">6.</span>Сроки обработки и хранения</h2>
+      <p>6.1. Персональные данные обрабатываются до достижения целей обработки или до отзыва клиентом согласия.</p>
+      <p>6.2. Сведения, связанные с оказанными услугами и расчётами, хранятся в течение сроков, установленных налоговым законодательством РФ.</p>
+      <p>6.3. Когда цели обработки достигнуты или согласие отозвано, данные уничтожаются или обезличиваются, если закон не требует иного.</p>
+    </section>
+
+    <section id="s7">
+      <h2><span class="num">7.</span>Cookie и технические данные</h2>
+      <p>7.1. При посещении Сайта браузер может автоматически передавать технические данные: IP-адрес, тип браузера и устройства, адрес страницы, с которой выполнен переход, время посещения.</p>
+      <p>7.2. Эти данные нужны для корректной работы и защиты Сайта, загрузки шрифтов и изображений. Они не используются для того, чтобы установить личность посетителя.</p>
+      <p>7.3. Клиент может ограничить или отключить сохранение cookie в настройках браузера. Часть функций Сайта при этом может работать некорректно.</p>
+    </section>
+
+    <section id="s8">
+      <h2><span class="num">8.</span>Защита персональных данных</h2>
+      <p>8.1. Оператор принимает необходимые правовые, организационные и технические меры для защиты персональных данных от неправомерного или случайного доступа, изменения, уничтожения, блокирования, копирования и распространения.</p>
+      <p>8.2. Доступ к персональным данным клиентов имеет только Оператор.</p>
+    </section>
+
+    <section id="s9">
+      <h2><span class="num">9.</span>Права клиента и отзыв согласия</h2>
+      <p>9.1. Клиент вправе:</p>
+      <ul>
+        <li>получить сведения о том, какие его данные обрабатываются и как;</li>
+        <li>потребовать уточнить, заблокировать или удалить данные, если они неполные, устаревшие, неточные или обрабатываются с нарушением закона;</li>
+        <li>отозвать согласие на обработку персональных данных, в том числе согласие на съёмку и публикацию;</li>
+        <li>обжаловать действия Оператора в Роскомнадзоре или в суде.</li>
+      </ul>
+      <p>9.2. Запрос или отзыв согласия направляется на электронную почту <span class="todo">[e-mail]</span>, по телефону <a href="tel:+79886679999">+7 988 667-99-99</a> или в мессенджерах, указанных в реквизитах. Оператор отвечает на обращение в сроки, установленные законодательством РФ.</p>
+      <p class="note">Если клиент отзовёт согласие, Оператор может не суметь записать его на процедуру или связаться с ним — для этого нужны имя и телефон.</p>
+    </section>
+
+    <section id="s10">
+      <h2><span class="num">10.</span>Заключительные положения</h2>
+      <p>10.1. Оператор вправе изменять Политику. Новая редакция вступает в силу с момента её публикации на Сайте, если в ней не указано иное.</p>
+      <p>10.2. Действующая редакция Политики всегда доступна на Сайте по ссылке «Политика конфиденциальности» в нижней части страницы.</p>
+    </section>
+
+    <div class="requisites" id="requisites">
+      <h2>Реквизиты Оператора</h2>
+      <dl>
+        <div class="req-row"><dt>Оператор</dt><dd>Магерамова Самира <span class="todo">[отчество]</span></dd></div>
+        <div class="req-row"><dt>Статус</dt><dd>Плательщик налога на профессиональный доход (самозанятая)</dd></div>
+        <div class="req-row"><dt>ИНН</dt><dd><span class="todo">[ИНН]</span></dd></div>
+        <div class="req-row"><dt>Адрес студии</dt><dd>г. Новороссийск, ул. Савицкого, 2 — студия SAMIRA MAGERAMOVA</dd></div>
+        <div class="req-row"><dt>Телефон</dt><dd><a href="tel:+79886679999">+7 988 667-99-99</a></dd></div>
+        <div class="req-row"><dt>E-mail</dt><dd><span class="todo">[e-mail]</span></dd></div>
+        <div class="req-row"><dt>Мессенджеры</dt><dd><a href="https://api.whatsapp.com/send?phone=79886679999" target="_blank" rel="noopener">WhatsApp</a> · <a href="https://t.me/samira_mager" target="_blank" rel="noopener">Telegram</a></dd></div>
+      </dl>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="foot">
+    <span>© 2026 SAMIRA MAGERAMOVA</span>
+    <a href="index.html">Вернуться на главную</a>
+  </div>
+</footer>
+
+</body>
+</html>
