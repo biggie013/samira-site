@@ -649,11 +649,12 @@
   .dev-credit.is-open .dev-trigger{ transform:translateY(-1px); color:var(--ink); border-color:#fff; box-shadow:0 6px 16px rgba(255,255,255,0.12); }
   .dev-credit.is-open .dev-trigger svg{ transform:rotate(180deg); }
 
-  .dev-links{ position:absolute; left:50%; bottom:calc(100% + 10px); transform:translateX(-50%) translateY(6px);
+  /* anchored to the right edge — the button now sits at the end of the row, so a centred menu would hang off-screen */
+  .dev-links{ position:absolute; right:0; bottom:calc(100% + 10px); transform:translateY(6px);
     display:flex; flex-direction:column; min-width:172px; padding:6px; border:1px solid var(--line); border-radius:14px;
     background:rgba(20,20,20,0.97); backdrop-filter:blur(10px); box-shadow:0 18px 40px rgba(0,0,0,0.55);
     opacity:0; visibility:hidden; transition:opacity .25s ease, transform .25s ease, visibility .25s; z-index:60; }
-  .dev-credit.is-open .dev-links{ opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
+  .dev-credit.is-open .dev-links{ opacity:1; visibility:visible; transform:translateY(0); }
   .dev-links a{ display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px;
     font-size:13px; letter-spacing:0.02em; text-transform:none; color:var(--ink-soft); transition:background .2s ease, color .2s ease; }
   .dev-links a:hover{ background:rgba(255,255,255,0.08); color:var(--ink); }
@@ -664,9 +665,8 @@
   .dev-links a[href*="t.me"] .dev-badge{ background:linear-gradient(180deg,#2AABEE,#229ED9); }
   .dev-links a[href*="instagram"] .dev-badge{ background:radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
   .dev-links a:hover .dev-badge{ transform:scale(1.08); box-shadow:0 4px 14px rgba(0,0,0,0.45); }
-  .dev-links::after{ content:""; position:absolute; top:100%; left:50%; margin-left:-6px;
+  .dev-links::after{ content:""; position:absolute; top:100%; right:24px;
     border:6px solid transparent; border-top-color:rgba(20,20,20,0.97); }
-  @media(max-width:620px){ .dev-credit{ order:3; } }
 
   /* Drawers */
   .overlay{position:fixed; inset:0; background:rgba(0,0,0,0.6); opacity:0; pointer-events:none; transition:.3s; z-index:200;}
@@ -1460,6 +1460,7 @@
     </div>
     <div class="footer-bottom">
       <span>© 2026 SAMIRA MAGERAMOVA</span>
+      <span>Политика конфиденциальности · Публичная оферта · Cookie</span>
       <div class="dev-credit" id="devCredit">
         <button class="dev-trigger" type="button" aria-expanded="false" aria-controls="devLinks">
           Разработчик
@@ -1474,7 +1475,6 @@
           </a>
         </div>
       </div>
-      <span>Политика конфиденциальности · Публичная оферта · Cookie</span>
     </div>
   </div>
 </footer>
