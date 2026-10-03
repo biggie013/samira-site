@@ -408,15 +408,23 @@
   .training-places .training-places-eyebrow{justify-content:center; margin-top:0;}
   .training-places-title{margin-top:12px; text-align:center; font-size:clamp(24px,2.6vw,30px); font-weight:600;}
   /* flex rather than grid, so a short last row (7 cards = 4 + 3) sits centred */
-  .tp-grid{display:flex; flex-wrap:wrap; justify-content:center; gap:16px; margin-top:34px; perspective:900px;}
-  /* each place is a small certificate: double frame, a round seal, a serif name, a rule and the city */
-  .tp-card{flex:0 0 calc((100% - 48px) / 4); padding:7px; border-radius:14px;
-    background:linear-gradient(160deg, #2b2b2b 0%, #222 55%, #1c1c1c 100%); border:1px solid rgba(255,255,255,0.2);
-    box-shadow:0 14px 30px -14px rgba(0,0,0,0.6);
+  .tp-grid{display:flex; flex-wrap:wrap; justify-content:center; gap:16px; margin-top:34px; perspective:1000px;}
+  /* the <li> tilts toward the cursor (with a moving glare); the .tp-flip inside turns over on click or tap */
+  .tp-card{position:relative; flex:0 0 calc((100% - 48px) / 4); cursor:pointer; border-radius:14px; transform-style:preserve-3d;
     transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--lift,0px));
-    transition:transform .5s cubic-bezier(.2,.7,.2,1), border-color .35s ease, box-shadow .35s ease; will-change:transform;}
-  .tp-card.is-tilting{transition:transform .12s linear, border-color .35s ease, box-shadow .35s ease;}
-  .tp-card:hover{--lift:-4px; border-color:rgba(255,255,255,0.55); box-shadow:0 24px 44px -16px rgba(0,0,0,0.75);}
+    transition:transform .6s cubic-bezier(.2,.7,.2,1); will-change:transform; -webkit-tap-highlight-color:transparent;}
+  .tp-card.is-tilting{transition:transform .12s linear;}
+  .tp-card:hover{--lift:-4px;}
+  .tp-card:focus-visible{outline:1px solid #fff; outline-offset:4px;}
+  /* both faces share one grid cell, so the card is as tall as its longer side */
+  .tp-flip{display:grid; height:100%; transform-style:preserve-3d; transition:transform .8s cubic-bezier(.4,.2,.2,1);}
+  .tp-card.is-flipped .tp-flip{transform:rotateY(180deg);}
+  /* each face is a small certificate: double frame, a round seal, a serif name, a rule and the city */
+  .tp-face{grid-area:1 / 1; padding:7px; border-radius:14px; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    background:linear-gradient(160deg, #2b2b2b 0%, #222 55%, #1c1c1c 100%); border:1px solid rgba(255,255,255,0.2);
+    box-shadow:0 14px 30px -14px rgba(0,0,0,0.6); transition:border-color .35s ease, box-shadow .35s ease;}
+  .tp-back{transform:rotateY(180deg);}
+  .tp-card:hover .tp-face{border-color:rgba(255,255,255,0.55); box-shadow:0 24px 44px -16px rgba(0,0,0,0.75);}
   .tp-frame{height:100%; min-height:206px; display:flex; flex-direction:column; align-items:center; text-align:center;
     padding:22px 16px 18px; border:1px solid rgba(255,255,255,0.14); border-radius:9px;
     background:radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05), transparent 65%);}
@@ -426,10 +434,23 @@
   .tp-seal--star{background:#fff;}
   .tp-seal--star::after{border-color:rgba(0,0,0,0.3);}
   .tp-seal--star svg{width:20px; height:20px; fill:#111;}
-  .tp-name{margin-top:16px; font-family:'Playfair Display',serif; font-size:18px; font-weight:600; line-height:1.3; color:var(--ink);}
-  .tp-kind{margin-top:6px; font-family:'Playfair Display',serif; font-style:italic; font-size:14px; color:var(--ink-soft);}
-  .tp-rule{width:30px; height:1px; margin:auto 0 0; background:rgba(255,255,255,0.4);}
+  .tp-seal--lg{width:70px; height:70px; font-size:21px;}
+  .tp-seal--lg::after{inset:5px;}
+  .tp-seal--lg svg{width:28px; height:28px;}
+  /* the bottom margins keep the rule clear of a long, wrapping name */
+  .tp-name{margin:16px 0 16px; font-family:'Playfair Display',serif; font-size:18px; font-weight:600; line-height:1.3; color:var(--ink);}
+  .tp-kind{margin:-10px 0 16px; font-family:'Playfair Display',serif; font-style:italic; font-size:14px; color:var(--ink-soft);}
+  .tp-cert{margin-top:14px; font-family:'Playfair Display',serif; font-style:italic; font-size:24px; font-weight:500; line-height:1.2; color:#fff;}
+  .tp-cert-sub{margin:6px 0 16px; font-size:11px; font-weight:600; letter-spacing:0.14em; line-height:1.6; text-transform:uppercase; color:var(--ink-soft);}
+  .tp-rule{width:30px; height:1px; flex:0 0 auto; margin-top:auto; background:rgba(255,255,255,0.4);}
   .tp-city{margin-top:12px; font-size:11.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-faint);}
+  .tp-back .tp-city{letter-spacing:0.1em; line-height:1.5;}
+  /* light that follows the cursor across the card */
+  .tp-glare{position:absolute; inset:0; border-radius:14px; pointer-events:none; opacity:0; transform:translateZ(2px);
+    background:radial-gradient(circle at var(--gx,50%) var(--gy,50%), rgba(255,255,255,0.2), rgba(255,255,255,0.05) 32%, transparent 62%);
+    transition:opacity .45s ease;}
+  .tp-card.is-tilting .tp-glare{opacity:1;}
+  .tp-hint{margin-top:22px;}
   @media(max-width:900px){
     .training-cards{grid-template-columns:repeat(2,1fr);}
   }
@@ -869,7 +890,7 @@
     .tp-grid{gap:12px; margin-top:24px;}
     .tp-card{flex-basis:100%;}
     .tp-frame{min-height:0; padding:20px 16px 16px;}
-    .tp-rule{margin-top:16px;}
+    .tp-rule{margin-top:0;}
     .tp-name{font-size:18px;}
     .tp-city{font-size:12.5px;}
 
@@ -1294,17 +1315,18 @@
       <div class="training-card"><div class="training-card-photo"><img id="training-img-3" loading="lazy" decoding="async" alt="Школа ПМ Антонины Андрусенко, Краснодар"></div></div>
       <div class="training-card"><div class="training-card-photo"><img id="training-img-4" loading="lazy" decoding="async" alt="Школа ПМ Ольги Костинецкой, Ростов-на-Дону"></div></div>
     </div>
+    <div class="catalog-hint tp-hint">Нажмите, чтобы перевернуть карточку и обратно</div>
     <div class="training-places">
       <div class="eyebrow training-places-eyebrow">Повышение квалификации</div>
       <h3 class="training-places-title">Где я училась</h3>
       <ul class="tp-grid">
-        <li class="tp-card"><div class="tp-frame"><span class="tp-seal" aria-hidden="true">SM</span><span class="tp-name">Школа ПМ Юлии Евенко</span><span class="tp-rule"></span><span class="tp-city">Краснодар</span></div></li>
-        <li class="tp-card"><div class="tp-frame"><span class="tp-seal" aria-hidden="true">SM</span><span class="tp-name">Академия ПМ Ирины Щербаковой</span><span class="tp-rule"></span><span class="tp-city">Санкт-Петербург</span></div></li>
-        <li class="tp-card"><div class="tp-frame"><span class="tp-seal" aria-hidden="true">SM</span><span class="tp-name">Обучающий центр Ирины Максимовой</span><span class="tp-rule"></span><span class="tp-city">Москва</span></div></li>
-        <li class="tp-card"><div class="tp-frame"><span class="tp-seal" aria-hidden="true">SM</span><span class="tp-name">Школа ПМ Антонины Андрусенко</span><span class="tp-rule"></span><span class="tp-city">Краснодар</span></div></li>
-        <li class="tp-card"><div class="tp-frame"><span class="tp-seal" aria-hidden="true">SM</span><span class="tp-name">Школа ПМ Ольги Костинецкой</span><span class="tp-rule"></span><span class="tp-city">Ростов-на-Дону</span></div></li>
-        <li class="tp-card tp-card--event"><div class="tp-frame"><span class="tp-seal tp-seal--star" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg></span><span class="tp-name">Permanent Evolution</span><span class="tp-kind">конференция и чемпионат</span><span class="tp-rule"></span><span class="tp-city">Краснодар</span></div></li>
-        <li class="tp-card tp-card--event"><div class="tp-frame"><span class="tp-seal tp-seal--star" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg></span><span class="tp-name">Face Sensations</span><span class="tp-kind">конференция и чемпионат</span><span class="tp-rule"></span><span class="tp-city">Москва</span></div></li>
+        <li class="tp-card" tabindex="0" role="button" aria-pressed="false" aria-label="Школа ПМ Юлии Евенко, Краснодар — нажмите, чтобы перевернуть"><div class="tp-flip"><div class="tp-face tp-front"><div class="tp-frame"><span class="tp-seal" aria-hidden="true">SM</span><span class="tp-name">Школа ПМ Юлии Евенко</span><span class="tp-rule"></span><span class="tp-city">Краснодар</span></div></div><div class="tp-face tp-back" aria-hidden="true"><div class="tp-frame"><span class="tp-seal tp-seal--lg" aria-hidden="true">SM</span><span class="tp-cert">Сертификат</span><span class="tp-cert-sub">о повышении квалификации</span><span class="tp-rule"></span><span class="tp-city">Школа ПМ Юлии Евенко</span></div></div></div><span class="tp-glare" aria-hidden="true"></span></li>
+        <li class="tp-card" tabindex="0" role="button" aria-pressed="false" aria-label="Академия ПМ Ирины Щербаковой, Санкт-Петербург — нажмите, чтобы перевернуть"><div class="tp-flip"><div class="tp-face tp-front"><div class="tp-frame"><span class="tp-seal" aria-hidden="true">SM</span><span class="tp-name">Академия ПМ Ирины Щербаковой</span><span class="tp-rule"></span><span class="tp-city">Санкт-Петербург</span></div></div><div class="tp-face tp-back" aria-hidden="true"><div class="tp-frame"><span class="tp-seal tp-seal--lg" aria-hidden="true">SM</span><span class="tp-cert">Сертификат</span><span class="tp-cert-sub">о повышении квалификации</span><span class="tp-rule"></span><span class="tp-city">Академия ПМ Ирины Щербаковой</span></div></div></div><span class="tp-glare" aria-hidden="true"></span></li>
+        <li class="tp-card" tabindex="0" role="button" aria-pressed="false" aria-label="Обучающий центр Ирины Максимовой, Москва — нажмите, чтобы перевернуть"><div class="tp-flip"><div class="tp-face tp-front"><div class="tp-frame"><span class="tp-seal" aria-hidden="true">SM</span><span class="tp-name">Обучающий центр Ирины Максимовой</span><span class="tp-rule"></span><span class="tp-city">Москва</span></div></div><div class="tp-face tp-back" aria-hidden="true"><div class="tp-frame"><span class="tp-seal tp-seal--lg" aria-hidden="true">SM</span><span class="tp-cert">Сертификат</span><span class="tp-cert-sub">о повышении квалификации</span><span class="tp-rule"></span><span class="tp-city">Обучающий центр Ирины Максимовой</span></div></div></div><span class="tp-glare" aria-hidden="true"></span></li>
+        <li class="tp-card" tabindex="0" role="button" aria-pressed="false" aria-label="Школа ПМ Антонины Андрусенко, Краснодар — нажмите, чтобы перевернуть"><div class="tp-flip"><div class="tp-face tp-front"><div class="tp-frame"><span class="tp-seal" aria-hidden="true">SM</span><span class="tp-name">Школа ПМ Антонины Андрусенко</span><span class="tp-rule"></span><span class="tp-city">Краснодар</span></div></div><div class="tp-face tp-back" aria-hidden="true"><div class="tp-frame"><span class="tp-seal tp-seal--lg" aria-hidden="true">SM</span><span class="tp-cert">Сертификат</span><span class="tp-cert-sub">о повышении квалификации</span><span class="tp-rule"></span><span class="tp-city">Школа ПМ Антонины Андрусенко</span></div></div></div><span class="tp-glare" aria-hidden="true"></span></li>
+        <li class="tp-card" tabindex="0" role="button" aria-pressed="false" aria-label="Школа ПМ Ольги Костинецкой, Ростов-на-Дону — нажмите, чтобы перевернуть"><div class="tp-flip"><div class="tp-face tp-front"><div class="tp-frame"><span class="tp-seal" aria-hidden="true">SM</span><span class="tp-name">Школа ПМ Ольги Костинецкой</span><span class="tp-rule"></span><span class="tp-city">Ростов-на-Дону</span></div></div><div class="tp-face tp-back" aria-hidden="true"><div class="tp-frame"><span class="tp-seal tp-seal--lg" aria-hidden="true">SM</span><span class="tp-cert">Сертификат</span><span class="tp-cert-sub">о повышении квалификации</span><span class="tp-rule"></span><span class="tp-city">Школа ПМ Ольги Костинецкой</span></div></div></div><span class="tp-glare" aria-hidden="true"></span></li>
+        <li class="tp-card tp-card--event" tabindex="0" role="button" aria-pressed="false" aria-label="Permanent Evolution, Краснодар — нажмите, чтобы перевернуть"><div class="tp-flip"><div class="tp-face tp-front"><div class="tp-frame"><span class="tp-seal tp-seal--star" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg></span><span class="tp-name">Permanent Evolution</span><span class="tp-kind">конференция и чемпионат</span><span class="tp-rule"></span><span class="tp-city">Краснодар</span></div></div><div class="tp-face tp-back" aria-hidden="true"><div class="tp-frame"><span class="tp-seal tp-seal--star tp-seal--lg" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg></span><span class="tp-cert">Сертификат</span><span class="tp-cert-sub">участника конференции и чемпионата</span><span class="tp-rule"></span><span class="tp-city">Permanent Evolution</span></div></div></div><span class="tp-glare" aria-hidden="true"></span></li>
+        <li class="tp-card tp-card--event" tabindex="0" role="button" aria-pressed="false" aria-label="Face Sensations, Москва — нажмите, чтобы перевернуть"><div class="tp-flip"><div class="tp-face tp-front"><div class="tp-frame"><span class="tp-seal tp-seal--star" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg></span><span class="tp-name">Face Sensations</span><span class="tp-kind">конференция и чемпионат</span><span class="tp-rule"></span><span class="tp-city">Москва</span></div></div><div class="tp-face tp-back" aria-hidden="true"><div class="tp-frame"><span class="tp-seal tp-seal--star tp-seal--lg" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg></span><span class="tp-cert">Сертификат</span><span class="tp-cert-sub">участника конференции и чемпионата</span><span class="tp-rule"></span><span class="tp-city">Face Sensations</span></div></div></div><span class="tp-glare" aria-hidden="true"></span></li>
       </ul>
     </div>
   </div>
@@ -2231,20 +2253,39 @@ let spinReviews = function(){};
   document.addEventListener('keydown', e => { if(e.key === 'Escape') setOpen(false); });
 })();
 
-/* Training certificates tilt toward the cursor — mouse only, touch screens keep them flat */
+/* Training certificates: click / tap turns a card over and back; with a mouse they also
+   tilt toward the cursor while a glare follows it. Touch screens only get the turn. */
 (function(){
+  const cards = document.querySelectorAll('.tp-card');
+  function turn(card){
+    const flipped = card.classList.toggle('is-flipped');
+    card.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+  }
+  cards.forEach(card => {
+    card.addEventListener('click', () => turn(card));
+    card.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); turn(card); }
+    });
+  });
+
   if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
-  const MAX = 7;   // degrees
-  document.querySelectorAll('.tp-card').forEach(card => {
+  const MAX = 12;   // degrees
+  cards.forEach(card => {
+    // measured on entry: the tilted card's own box shifts as it turns, which would make it jitter
+    let box = null;
+    card.addEventListener('pointerenter', () => { box = card.getBoundingClientRect(); });
     card.addEventListener('pointermove', e => {
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;
-      const y = (e.clientY - r.top) / r.height - 0.5;
+      if(!box) box = card.getBoundingClientRect();
+      const x = Math.min(1, Math.max(0, (e.clientX - box.left) / box.width));
+      const y = Math.min(1, Math.max(0, (e.clientY - box.top) / box.height));
       card.classList.add('is-tilting');
-      card.style.setProperty('--ry', (x * MAX * 2).toFixed(2) + 'deg');
-      card.style.setProperty('--rx', (-y * MAX * 2).toFixed(2) + 'deg');
+      card.style.setProperty('--ry', ((x - 0.5) * MAX * 2).toFixed(2) + 'deg');
+      card.style.setProperty('--rx', ((0.5 - y) * MAX * 2).toFixed(2) + 'deg');
+      card.style.setProperty('--gx', (x * 100).toFixed(1) + '%');
+      card.style.setProperty('--gy', (y * 100).toFixed(1) + '%');
     });
     card.addEventListener('pointerleave', () => {
+      box = null;
       card.classList.remove('is-tilting');
       card.style.setProperty('--rx', '0deg');
       card.style.setProperty('--ry', '0deg');
