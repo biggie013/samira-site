@@ -730,6 +730,9 @@
   .drawer-nav a{display:block; padding:16px 0; border-bottom:1px solid var(--line); font-size:16px; font-weight:600; letter-spacing:0.03em; text-transform:uppercase; color:var(--ink-soft);}
   .drawer-nav a:hover{color:var(--ink);}
   .drawer-nav-foot{margin-top:28px; padding-top:20px; border-top:1px solid var(--line);}
+  .drawer-address{display:flex; align-items:center; gap:8px; margin-bottom:12px; padding:4px 0; font-size:15px; color:var(--ink-soft);}
+  .drawer-address svg{width:16px; height:16px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.6;}
+  .drawer-address:hover{color:var(--ink);}
   .drawer-nav-foot .phone-link{display:block; font-size:18px;}
   .drawer-nav-foot .socials{margin-top:16px;}
   .drawer-empty{text-align:center; padding:60px 10px; color:var(--ink-soft);}
@@ -1749,6 +1752,7 @@
       <a href="#contact" onclick="closeDrawers()">Контакты</a>
     </nav>
     <div class="drawer-nav-foot">
+      <a class="drawer-address" href="#location-section" onclick="closeDrawers()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.3"/></svg>Новороссийск, ул. Савицкого, 2</a>
       <a class="phone-link" href="tel:+79886679999">+7 988 667-99-99</a>
       <div class="socials">
         <a href="https://www.instagram.com/samira_mageramova?igsh=a29mdnc4bXRqajly" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
