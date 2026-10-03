@@ -14,6 +14,7 @@
     --bg:#171717; --bg-2:#1F1F1F; --bg-3:#272727;
     --ink:#FFFFFF; --ink-soft:rgba(255,255,255,0.85); --ink-faint:rgba(255,255,255,0.65);
     --line:rgba(159,159,159,0.26);
+    --gold:#FFFFFF; --gold-light:#FFFFFF;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
@@ -90,10 +91,66 @@
   /* a value still to be filled in — deliberately easy to spot */
   .todo{padding:1px 8px; border:1px dashed rgba(255,214,102,0.8); border-radius:6px; color:#FFD666; white-space:nowrap;}
 
-  footer{border-top:1px solid var(--line); background:#2a2a2a;}
-  .foot{max-width:1240px; margin:0 auto; padding:28px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:13px; color:var(--ink-faint);}
-  .foot a{border-bottom:1px solid rgba(255,255,255,0.3);}
-  .foot a:hover{color:#fff; border-color:#fff;}
+  /* footer — the same one as on the main page; links point back into index.html */
+  .fwrap{max-width:1240px; margin:0 auto; padding:0 32px;}
+  ul.footer-list, .footer-col ul{margin:0; padding:0; list-style:none;}
+  .footer-col li{padding-left:0;}
+  .footer-col li::before{content:none;}
+  footer{background:var(--bg-2); border-top:1px solid var(--line); padding:76px 0 34px;}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px;}
+  .footer-logo{font-family:'Playfair Display',serif; font-weight:600; font-size:23px; text-transform:uppercase; letter-spacing:0.02em;}
+  .footer-col h4{font-size:11.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold-light); margin-bottom:18px;}
+  .footer-col li{margin-bottom:11px; font-size:14px; color:var(--ink-soft);}
+  .footer-col li a:hover{color:var(--gold);}
+  .socials{display:flex; gap:10px; margin-top:20px;}
+  .socials a{ width:36px;height:36px;border:1px solid var(--line); border-radius:50%; display:flex;align-items:center;justify-content:center; font-size:11px; font-weight:700; transition:.25s; color:var(--ink-soft);}
+  .socials a:hover{background:var(--gold); color:#0D0B0A; border-color:var(--gold);}
+  .socials a[aria-label="Instagram"]{ color:#C97A78; border-color:rgba(201,122,120,0.35); }
+  .socials a[aria-label="Instagram"]:hover{ background:#C97A78; border-color:#C97A78; color:#241509; }
+  .socials a[aria-label="WhatsApp"]{ color:#7FAE86; border-color:rgba(127,174,134,0.35); }
+  .socials a[aria-label="WhatsApp"]:hover{ background:#7FAE86; border-color:#7FAE86; color:#241509; }
+  .socials a[aria-label="Telegram"]{ color:#7EB6E0; border-color:rgba(126,182,224,0.35); }
+  .socials a[aria-label="Telegram"]:hover{ background:#7EB6E0; border-color:#7EB6E0; color:#0D0B0A; }
+  .footer-bottom{ margin-top:54px; padding-top:28px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:12.5px; color:var(--ink-faint); }
+
+  .footer-doc-link{border-bottom:1px solid rgba(255,255,255,0.3); transition:color .25s, border-color .25s;}
+  .footer-doc-link:hover{color:#fff; border-color:#fff;}
+  .footer-note{margin:18px 0 0; font-size:12px; line-height:1.5; color:var(--ink-faint);}
+
+  /* Developer credit — click opens a small choice of contacts */
+  .dev-credit{ position:relative; }
+  /* gradient ring drawn with the padding-box / border-box trick, slowly drifting */
+  .dev-trigger{ position:relative; display:inline-flex; align-items:center; gap:8px; padding:8px 17px; border-radius:999px;
+    border:1px solid rgba(255,255,255,0.45); background:#232323;
+    color:var(--ink-soft); font-family:inherit; font-size:12px; font-weight:600; letter-spacing:0.11em; text-transform:uppercase;
+    transition:transform .3s ease, box-shadow .35s ease, color .3s ease, border-color .3s ease; }
+  .dev-trigger svg{ width:12px; height:12px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+    transition:transform .3s ease; }
+  .dev-trigger:hover{ transform:translateY(-1px); color:var(--ink); border-color:#fff; box-shadow:0 6px 16px rgba(255,255,255,0.12); }
+  .dev-credit.is-open .dev-trigger{ transform:translateY(-1px); color:var(--ink); border-color:#fff; box-shadow:0 6px 16px rgba(255,255,255,0.12); }
+  .dev-credit.is-open .dev-trigger svg{ transform:rotate(180deg); }
+
+  /* anchored to the right edge — the button now sits at the end of the row, so a centred menu would hang off-screen */
+  .dev-links{ position:absolute; right:0; bottom:calc(100% + 10px); transform:translateY(6px);
+    display:flex; flex-direction:column; min-width:172px; padding:6px; border:1px solid var(--line); border-radius:14px;
+    background:rgba(20,20,20,0.97); backdrop-filter:blur(10px); box-shadow:0 18px 40px rgba(0,0,0,0.55);
+    opacity:0; visibility:hidden; transition:opacity .25s ease, transform .25s ease, visibility .25s; z-index:60; }
+  .dev-credit.is-open .dev-links{ opacity:1; visibility:visible; transform:translateY(0); }
+  .dev-links a{ display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px;
+    font-size:13px; letter-spacing:0.02em; text-transform:none; color:var(--ink-soft); transition:background .2s ease, color .2s ease; }
+  .dev-links a:hover{ background:rgba(255,255,255,0.08); color:var(--ink); }
+  .dev-badge{ width:26px; height:26px; flex:0 0 auto; border-radius:50%; border:none; color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:700; letter-spacing:0.04em;
+    transition:transform .25s ease, box-shadow .25s ease; }
+  /* brand colours, matched to the destination */
+  .dev-links a[href*="t.me"] .dev-badge{ background:linear-gradient(180deg,#2AABEE,#229ED9); }
+  .dev-links a[href*="instagram"] .dev-badge{ background:radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+  .dev-links a:hover .dev-badge{ transform:scale(1.08); box-shadow:0 4px 14px rgba(0,0,0,0.45); }
+  .dev-links::after{ content:""; position:absolute; top:100%; right:24px;
+    border:6px solid transparent; border-top-color:rgba(20,20,20,0.97); }
+
+  @media(max-width:980px){ .footer-grid{grid-template-columns:1fr 1fr; gap:34px;} }
+  @media(min-width:601px) and (max-width:980px){ .footer-col h4, .footer-bottom{font-size:13px;} .dev-trigger{padding:11px 19px; font-size:13px;} .socials a{width:44px; height:44px;} }
 
   @media(max-width:700px){
     .toc ol{columns:1;}
@@ -110,7 +167,18 @@
     main{padding:34px 0 70px;}
     .toc{padding:22px 20px; border-radius:16px;}
     .requisites{padding:24px 20px; border-radius:16px;}
-    .foot{padding:24px 20px; flex-direction:column; align-items:flex-start;}
+    .fwrap{padding:0 20px;}
+    footer{padding:56px 0 30px;}
+    .footer-grid{grid-template-columns:1fr; gap:30px;}
+    .footer-col h4{font-size:13px; margin-bottom:10px;}
+    .footer-col li{font-size:15px; margin-bottom:2px;}
+    .footer-col li a{display:inline-block; padding:7px 0;}
+    .socials a{width:44px; height:44px; font-size:12px;}
+    .footer-bottom{flex-direction:column; align-items:flex-start; gap:14px; margin-top:40px; font-size:13px;}
+    .dev-trigger{padding:12px 20px; font-size:13px;}
+    .dev-links{right:auto; left:0;}
+    .dev-links::after{right:auto; left:24px;}
+    .dev-links a{padding:12px 14px; font-size:14px;}
   }
 </style>
 </head>
@@ -274,12 +342,87 @@
   </div>
 </main>
 
-<footer>
-  <div class="foot">
-    <span>© 2026 SAMIRA MAGERAMOVA</span>
-    <a href="index.html">Вернуться на главную</a>
+<footer style="background:#2a2a2a;">
+  <div class="fwrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">SAMIRA MAGERAMOVA</div>
+        <p style="margin-top:16px; color:var(--ink-soft); max-width:260px; font-size:14px;">Permanent Makeup Atelier</p>
+        <div class="socials">
+          <a href="https://www.instagram.com/samira_mageramova?igsh=a29mdnc4bXRqajly" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+          <a href="https://api.whatsapp.com/send?phone=79886679999&utm_source=ig&utm_medium=social&utm_content=link_in_bio" target="_blank" rel="noopener" aria-label="WhatsApp">WA</a>
+          <a href="https://t.me/samira_mager" target="_blank" rel="noopener" aria-label="Telegram">TG</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Услуги</h4>
+        <ul>
+          <li><a href="index.html#catalog">Перманентный макияж бровей</a></li>
+          <li><a href="index.html#catalog">Перманентный макияж глаз</a></li>
+          <li><a href="index.html#catalog">Перманентный макияж губ</a></li>
+          <li><a href="index.html#catalog">Камуфляж рубцов и ареол груди</a></li>
+          <li><a href="index.html#catalog">Удаление татуажа лазером и ремувером</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Информация</h4>
+        <ul>
+          <li><a href="index.html#faq">Частые вопросы</a></li>
+          <li><a href="index.html#advantages">Почему я</a></li>
+          <li><a href="index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Контакты</h4>
+        <ul>
+          <li><a href="tel:+79886679999">+7 988 667-99-99</a></li>
+          <li>Ежедневно, 09:00–20:00</li>
+          <li>Новороссийск, ул. Савицкого, 2</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 SAMIRA MAGERAMOVA</span>
+      <span><a class="footer-doc-link" href="privacy.html" aria-current="page">Политика конфиденциальности</a> · Публичная оферта · Cookie</span>
+      <div class="dev-credit" id="devCredit">
+        <button class="dev-trigger" type="button" aria-expanded="false" aria-controls="devLinks">
+          Разработчик
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="dev-links" id="devLinks" role="menu">
+          <a href="https://t.me/+1thq9RfQWfFlMDA6" target="_blank" rel="noopener noreferrer" role="menuitem">
+            <span class="dev-badge">TG</span>Telegram
+          </a>
+          <a href="https://www.instagram.com/bgnssxz?igsi=bXl5M2x0bzBjdjJy&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" role="menuitem">
+            <span class="dev-badge">IG</span>Instagram
+          </a>
+        </div>
+      </div>
+    </div>
+    <p class="footer-note">* Instagram принадлежит компании Meta, которая признана в РФ экстремистской организацией и запрещена</p>
   </div>
 </footer>
 
+<script>
+/* Developer credit: click opens the contact choice, anything outside closes it */
+(function(){
+  const credit = document.getElementById('devCredit');
+  if(!credit) return;
+  const trigger = credit.querySelector('.dev-trigger');
+
+  function setOpen(open){
+    credit.classList.toggle('is-open', open);
+    trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  trigger.addEventListener('click', e => {
+    e.stopPropagation();
+    setOpen(!credit.classList.contains('is-open'));
+  });
+  document.addEventListener('click', e => {
+    if(!credit.contains(e.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') setOpen(false); });
+})();
+</script>
 </body>
 </html>
