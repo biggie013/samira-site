@@ -439,6 +439,10 @@
   .removal-cta{display:flex; justify-content:center; margin-top:26px;}
   @media(max-width:1400px){ .removal-steps{width:100%; margin-left:0;} }
   @media(max-width:900px){ .removal-steps{grid-template-columns:1fr 1fr; gap:14px;} }
+  /* two columns: a lone last card spans the row and sits centred under the pair, at the same width */
+  @media(min-width:601px) and (max-width:900px){
+    .removal-step:last-child:nth-child(odd){grid-column:1 / -1; justify-self:center; width:calc((100% - 14px) / 2);}
+  }
   @media(max-width:600px){
     .removal-steps{grid-template-columns:1fr; gap:14px; margin-top:36px;}
     .removal-step{padding:10px 10px 14px;}
