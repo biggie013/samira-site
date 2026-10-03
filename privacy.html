@@ -20,6 +20,39 @@
   html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
   body{margin:0; background:var(--bg); color:var(--ink); font-family:'Montserrat',sans-serif; font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased;}
   a{color:inherit; text-decoration:none;}
+
+  body.cursor-ready, body.cursor-ready *{ cursor:none; }
+  /* custom cursor — dot + trailing gold ring */
+  .cursor-dot, .cursor-ring{
+    position:fixed; top:0; left:0; z-index:10000; pointer-events:none;
+    border-radius:50%; transform:translate(-50%,-50%);
+    will-change:transform, width, height, opacity;
+  }
+  .cursor-dot{ display:none; }
+  .cursor-ring{
+    width:34px; height:34px; border:none; background:var(--gold);
+    border-radius:60% 40% 55% 45% / 45% 55% 40% 60%;
+    filter:blur(0.6px);
+    box-shadow:0 0 18px rgba(255,255,255,0.7);
+    animation:blobWobble 3.4s ease-in-out infinite;
+    opacity:0; transition:width .28s cubic-bezier(.2,.8,.2,1), height .28s cubic-bezier(.2,.8,.2,1), opacity .3s, background .3s;
+  }
+  @keyframes blobWobble{
+    0%, 100%{ border-radius:60% 40% 55% 45% / 45% 55% 40% 60%; }
+    33%{ border-radius:45% 55% 40% 60% / 60% 40% 55% 45%; }
+    66%{ border-radius:50% 50% 65% 35% / 35% 65% 45% 55%; }
+  }
+  body.cursor-ready .cursor-dot, body.cursor-ready .cursor-ring{ opacity:1; }
+  .cursor-ring.hover{ width:50px; height:50px; background:var(--gold-light); }
+  .cursor-ring.hover.pointer::after{ content:none; }
+  .cursor-ring.drag::after{ content:none; }
+  .cursor-canvas{ position:fixed; inset:0; z-index:9997; pointer-events:none; }
+  @media (pointer:coarse){
+    .cursor-canvas{ display:none; }
+  }
+  @media (pointer:coarse){
+    .cursor-dot, .cursor-ring{ display:none; }
+  }
   .wrap{max-width:860px; margin:0 auto; padding:0 32px;}
 
   /* header — same bar as the main site */
@@ -183,6 +216,9 @@
 </style>
 </head>
 <body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas class="cursor-canvas" id="cursorCanvas"></canvas>
 
 <header>
   <div class="topbar">
@@ -422,6 +458,102 @@
     if(!credit.contains(e.target)) setOpen(false);
   });
   document.addEventListener('keydown', e => { if(e.key === 'Escape') setOpen(false); });
+})();
+
+/* ============ CUSTOM CURSOR ============ */
+(function(){
+  if(window.matchMedia('(pointer:coarse)').matches) return;
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  const canvas = document.getElementById('cursorCanvas');
+  if(!dot || !ring || !canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let mx=0,my=0, rx=0,ry=0, started=false;
+  const points = [];
+  const maxPoints = 4;
+  const goldColor = '255,255,255';
+
+  document.addEventListener('mousemove', e=>{
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
+    if(!started){
+      started = true; document.body.classList.add('cursor-ready');
+      rx=mx; ry=my;
+      for(let i=0;i<maxPoints;i++) points.push({x:mx,y:my});
+    }
+  });
+
+  function loop(){
+    rx += (mx-rx)*0.55;
+    ry += (my-ry)*0.55;
+
+    const t = performance.now()/1000;
+    const idleX = Math.sin(t*2.6)*5.2 + Math.sin(t*5.1)*2.2;
+    const idleY = Math.cos(t*2.2)*5.2 + Math.cos(t*4.4)*2.2;
+    ring.style.transform = `translate(${rx+idleX}px, ${ry+idleY}px) translate(-50%,-50%)`;
+
+    points.push({x:rx, y:ry});
+    if(points.length > maxPoints) points.shift();
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(points.length > 2){
+      const n = points.length;
+      const maxW = 24;
+      const left = [];
+      const right = [];
+      for(let i=0;i<n;i++){
+        const p0 = points[Math.max(0,i-1)];
+        const p1 = points[Math.min(n-1,i+1)];
+        let dx = p1.x - p0.x, dy = p1.y - p0.y;
+        const len = Math.hypot(dx,dy) || 1;
+        dx/=len; dy/=len;
+        const nx = -dy, ny = dx;
+        const t = i/(n-1);
+        const w = (maxW * (t*t)) / 2;
+        left.push({x:points[i].x + nx*w, y:points[i].y + ny*w});
+        right.push({x:points[i].x - nx*w, y:points[i].y - ny*w});
+      }
+      ctx.beginPath();
+      ctx.moveTo(left[0].x, left[0].y);
+      for(let i=1;i<n;i++) ctx.lineTo(left[i].x, left[i].y);
+      for(let i=n-1;i>=0;i--) ctx.lineTo(right[i].x, right[i].y);
+      ctx.closePath();
+      const grad = ctx.createLinearGradient(points[0].x, points[0].y, points[n-1].x, points[n-1].y);
+      grad.addColorStop(0, `rgba(${goldColor},0)`);
+      grad.addColorStop(1, `rgba(${goldColor},0.55)`);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  const pointerTargets = 'a, button, .card, .adv-card, .blog-card, .pill, input[type=checkbox]';
+  const dragTargets = '.carousel, .adv-carousel';
+
+  document.addEventListener('mouseover', e=>{
+    const t = e.target;
+    if(t.closest(dragTargets)){
+      ring.classList.add('hover','drag'); ring.classList.remove('pointer');
+    } else if(t.closest(pointerTargets)){
+      ring.classList.add('hover','pointer'); ring.classList.remove('drag');
+    }
+  });
+  document.addEventListener('mouseout', e=>{
+    const t = e.target;
+    if(t.closest(dragTargets) || t.closest(pointerTargets)){
+      ring.classList.remove('hover','pointer','drag');
+    }
+  });
+
+  document.addEventListener('mouseleave', ()=>{ dot.style.opacity=0; ring.style.opacity=0; });
+  document.addEventListener('mouseenter', ()=>{ if(started){ dot.style.opacity=''; ring.style.opacity=''; } });
 })();
 </script>
 </body>
