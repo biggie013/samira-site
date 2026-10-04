@@ -2287,25 +2287,30 @@ let spinReviews = function(){};
   document.addEventListener('keydown', e => { if(e.key === 'Escape') setOpen(false); });
 })();
 
-/* Training certificates: each one rises into place as it scrolls into view — cards arriving in
-   the same moment (a desktop row) follow each other in order; with a mouse they also tilt
-   toward the cursor while a glare follows it. */
+/* Training certificates: each one rises into place every time it scrolls into view — cards
+   arriving in the same moment (a desktop row) follow each other in order. Once a card has left
+   the screen completely it hides again, so the next visit (scrolling down or back up) replays it.
+   With a mouse they also tilt toward the cursor while a glare follows it. */
 (function initTrainingPlaces(){
   const cards = Array.prototype.slice.call(document.querySelectorAll('.tp-card'));
   if(!cards.length) return;
   if('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     cards.forEach(card => card.classList.add('tp-pre'));
     const seen = new IntersectionObserver(entries => {
-      entries.filter(en => en.isIntersecting)
+      // fully off screen: reset, out of sight, ready for the next entrance
+      entries.filter(en => !en.isIntersecting).forEach(en => {
+        en.target.classList.remove('tp-in');
+        en.target.classList.add('tp-pre');
+      });
+      entries.filter(en => en.intersectionRatio >= 0.25 && !en.target.classList.contains('tp-in'))
         .map(en => en.target)
         .sort((a, b) => cards.indexOf(a) - cards.indexOf(b))
         .forEach((card, d) => {
           card.style.setProperty('--d', d);
           card.classList.remove('tp-pre');
           card.classList.add('tp-in');
-          seen.unobserve(card);
         });
-    }, {threshold:0.25});
+    }, {threshold:[0, 0.25]});
     cards.forEach(card => seen.observe(card));
   }
 
