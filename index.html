@@ -637,6 +637,11 @@
   .submit-btn::before{ content:""; position:absolute; inset:0; background:#000; transform:translateX(-101%); transition:transform .5s cubic-bezier(.2,.8,.3,1); z-index:-1; }
   .submit-btn:hover::before{ transform:translateX(0); }
   .submit-btn:hover{ color:#fff; box-shadow:0 0 0 2px #fff; }
+  .submit-btn:disabled{ opacity:.6; cursor:progress; }
+  /* spam trap: kept out of sight and out of the tab order, but still in the form */
+  .hp-field{ position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden; }
+  .form-status{ margin:4px 0 0; font-size:15px; line-height:1.5; color:var(--ink); }
+  .form-status[data-kind="error"]{ color:#FFB4A8; }
 
   /* Location / map */
   .location{border:1px solid var(--line); border-radius:20px; overflow:hidden; background:var(--bg-2);}
@@ -1557,12 +1562,16 @@
         <h2>Оставьте телефон — перезвоним и подберём время</h2>
         <p class="lead">Расскажем о процедуре и ответим на вопросы по уходу.</p>
       </div>
-      <form class="contact-form" onsubmit="return handleContactSubmit(event)">
-        <input type="text" placeholder="Ваше имя" required>
-        <input type="tel" placeholder="Телефон" required>
+      <!-- data-endpoint: the booking relay (worker/booking-worker.js). Empty = not connected yet. -->
+      <form class="contact-form" data-endpoint="" onsubmit="return handleContactSubmit(event)">
+        <input type="text" name="client_name" placeholder="Ваше имя" autocomplete="name" maxlength="80" required>
+        <input type="tel" name="client_phone" placeholder="Телефон" autocomplete="tel" maxlength="30" required>
+        <!-- spam trap: hidden from people, bots that fill every field give themselves away -->
+        <div class="hp-field" aria-hidden="true"><label>Ваш сайт <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
         <label class="consent"><input type="checkbox" name="pd_consent" required> <span>Согласен на <a href="soglasie.html" target="_blank" rel="noopener">обработку персональных данных</a></span></label>
         <label class="consent"><input type="checkbox" name="policy_ack" required> <span>Ознакомлен с <a href="privacy.html" target="_blank" rel="noopener">политикой конфиденциальности</a></span></label>
         <button type="submit" class="submit-btn">Записаться</button>
+        <p class="form-status" role="status" aria-live="polite" hidden></p>
       </form>
     </div>
   </div>
@@ -1986,10 +1995,67 @@ document.querySelectorAll('.faq-q').forEach(btn=>{
   });
 });
 
-function handleContactSubmit(e){
+/* Booking form → the owner's Telegram, through the relay in worker/booking-worker.js.
+   The bot token exists only in that function's secrets; the page sends name, phone and the two
+   consent ticks, and keeps nothing (no cookies, no browser storage). */
+const BOOKING_COOLDOWN_MS = 60 * 1000;   // one request a minute from an open page
+const BOOKING_PHONE = '+7 988 667-99-99';
+const bookingStartedAt = Date.now();     // the relay rejects forms "filled" faster than a person could
+let lastBookingAt = 0;
+
+async function handleContactSubmit(e){
   e.preventDefault();
-  alert('Спасибо! Мы свяжемся с вами в ближайшее время.');
-  e.target.reset();
+  const form = e.target;
+  const status = form.querySelector('.form-status');
+  const button = form.querySelector('.submit-btn');
+  const endpoint = form.dataset.endpoint;
+  function say(text, kind){ status.textContent = text; status.dataset.kind = kind || ''; status.hidden = false; }
+
+  if(!endpoint){
+    say('Онлайн-запись временно недоступна. Позвоните нам: ' + BOOKING_PHONE, 'error');
+    return false;
+  }
+  if(Date.now() - lastBookingAt < BOOKING_COOLDOWN_MS){
+    say('Заявка уже отправлена. Если нужно что-то уточнить, позвоните: ' + BOOKING_PHONE, 'error');
+    return false;
+  }
+
+  const payload = {
+    client_name: form.elements.client_name.value,
+    client_phone: form.elements.client_phone.value,
+    consent_pd: form.elements.pd_consent.checked,
+    consent_policy: form.elements.policy_ack.checked,
+    website: form.elements.website.value,
+    startedAt: bookingStartedAt
+  };
+
+  button.disabled = true;
+  say('Отправляем…');
+  try{
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    if(res.ok && data.ok){
+      form.reset();
+      lastBookingAt = Date.now();
+      say('Спасибо, перезвоним');
+    } else if(res.status === 429){
+      say('Слишком много заявок подряд. Попробуйте позже или позвоните: ' + BOOKING_PHONE, 'error');
+    } else if(data.error === 'phone'){
+      say('Проверьте номер телефона — в нём должно быть от 10 до 15 цифр.', 'error');
+    } else if(data.error === 'too_fast'){
+      say('Пожалуйста, проверьте данные и отправьте ещё раз.', 'error');
+    } else {
+      say('Не удалось отправить заявку. Позвоните нам: ' + BOOKING_PHONE, 'error');
+    }
+  } catch(err){
+    say('Не удалось отправить заявку. Проверьте интернет или позвоните: ' + BOOKING_PHONE, 'error');
+  } finally {
+    button.disabled = false;
+  }
   return false;
 }
 
