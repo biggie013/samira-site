@@ -530,6 +530,8 @@
   @media(max-width:520px){ .review-card{flex-basis:270px;} }
   /* Reviews 3D ring */
   .reviews-stage{ position:relative; margin:0 auto; height:380px; perspective:3200px; cursor:grab; touch-action:pan-y; user-select:none; }
+  /* holding a finger on a review only pauses the ring: no text selection, no copy/lookup menu */
+  .reviews-stage, .reviews-stage *{ -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
   .reviews-stage:active{ cursor:grabbing; }
   .reviews-ring{ position:absolute; inset:0; transform-style:preserve-3d; }
   .reviews-stage .review-card{ position:absolute; left:50%; top:50%; width:300px; height:330px; margin-left:-150px; margin-top:-165px; flex:0 0 auto; padding:30px 28px 26px; backface-visibility:hidden; box-shadow:0 18px 44px rgba(0,0,0,0.35); }
@@ -2320,6 +2322,9 @@ let spinReviews = function(){};
   stage.addEventListener('pointerup', release);
   stage.addEventListener('pointercancel', release);
   stage.addEventListener('dragstart', e => e.preventDefault());
+  // a long press would otherwise select the review text or open the copy menu
+  stage.addEventListener('selectstart', e => e.preventDefault());
+  stage.addEventListener('contextmenu', e => e.preventDefault());
 
   layout();
   window.addEventListener('resize', layout);
