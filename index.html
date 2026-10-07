@@ -301,6 +301,10 @@
      show through mirrored. Both faces swap at the same moment in either direction. */
   .card-face-front, .card-face-back{ transition:visibility 0s linear .4s; }
   .card-flip.flipped .card-face-front{ visibility:hidden; }
+  /* the badge, the SM watermark and the heart fade out as soon as a tapped card starts turning, so
+     nothing pokes out at the edge mid-turn; on the way back they fade in once the front faces you */
+  .card-flip .card-badge, .card-flip .card-watermark, .card-flip .heart{ transition:opacity .35s ease .55s; }
+  .card-flip.flipped .card-badge, .card-flip.flipped .card-watermark, .card-flip.flipped .heart{ opacity:0; transition:opacity .18s ease; }
   .card-back-photo{
     position:absolute; inset:0;
     background-color:#000;
