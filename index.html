@@ -2028,8 +2028,9 @@ document.querySelectorAll('.faq-q').forEach(btn=>{
    themselves. The site stores and sends nothing. */
 const BOOKING_PHONE = '+7 988 667-99-99';
 const BOOKING_CHATS = {
-  // a MAX profile link takes no message text, so the request goes to the clipboard instead
-  max: { label: 'MAX', url: () => 'https://max.ru/u/f9LHodD0cOJnBRcjopvA_0J0WimdLEPypGrrhuDkWYJNb5JSMAEJdhPzCuM' },
+  // MAX documents no way to prefill a message in a profile link; the text parameter is passed in
+  // case the app honours it (like Telegram's), and the request is always copied as a fallback
+  max: { label: 'MAX', url: text => 'https://max.ru/u/f9LHodD0cOJnBRcjopvA_0J0WimdLEPypGrrhuDkWYJNb5JSMAEJdhPzCuM?text=' + encodeURIComponent(text) },
   telegram: { label: 'Telegram', url: text => 'https://t.me/samira_mager?text=' + encodeURIComponent(text) }
 };
 
@@ -2063,7 +2064,7 @@ function handleContactSubmit(e){
   if(navigator.clipboard){ copied = true; navigator.clipboard.writeText(text).catch(() => {}); }
   if(via === 'max'){
     say(copied
-      ? 'Открываем MAX. Вставьте текст заявки в чат — он уже скопирован — и отправьте, мы перезвоним.'
+      ? 'Открываем MAX. Если текст не подставился сам, вставьте его в чат — он уже скопирован. Отправьте сообщение, и мы перезвоним.'
       : 'Открываем MAX. Напишите в чате: «' + text + '» — и мы перезвоним.');
   } else {
     say('Открываем Telegram. Если текст не подставился сам, вставьте его в чат — он уже скопирован. Отправьте сообщение, и мы перезвоним.');
