@@ -148,9 +148,6 @@
   .hero-cta.solid::before{ content:""; position:absolute; inset:0; background:#000; transform:translateX(-101%); transition:transform .5s cubic-bezier(.2,.8,.3,1); z-index:-1; }
   .hero-cta.solid:hover::before{ transform:translateX(0); }
   .hero-cta.solid:hover{ color:#fff; box-shadow:0 0 0 2px #fff; }
-  /* hero: "Выбрать услугу" and "Связаться сразу" side by side */
-  .hero-actions{ display:flex; flex-wrap:wrap; gap:14px; margin-top:14px; }
-  .hero-actions .hero-cta{ margin-top:0; }
 
   /* Marquee ticker */
   .ticker{ background:var(--bg-2); color:var(--ink); overflow:hidden; white-space:nowrap; padding:9px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
@@ -877,9 +874,6 @@
     .hero h1{font-size:min(48px, calc((100vw - 44px) / 8.1)); line-height:0.95;}
     .hero-sub{font-size:16px; margin-top:18px;}
     .hero-cta{padding:17px 28px; font-size:14px; max-width:100%; text-align:center; justify-content:center;}
-    /* two equal halves; longer labels wrap onto a second line, like the booking buttons */
-    .hero-actions{gap:10px;}
-    .hero-actions .hero-cta{flex:1 1 0; min-width:0; padding:15px 10px; font-size:13px; letter-spacing:0.06em; line-height:1.3;}
 
     /* readable small print */
     .eyebrow{font-size:13px; letter-spacing:0.2em;}
@@ -1135,10 +1129,7 @@
     <div class="hero-tag">Permanent Makeup Atelier</div>
     <h1>SAMIRA<br><i class="gold-text">MAGERAMOVA</i></h1>
     <p class="hero-sub">Перманентный макияж бровей, глаз, губ, камуфляж рубцов и ареол груди, удаление татуажа.</p>
-    <div class="hero-actions">
-      <a href="#catalog" class="hero-cta solid">Выбрать услугу&nbsp;→</a>
-      <a href="#contact" class="hero-cta solid">Связаться сразу</a>
-    </div>
+    <a href="#catalog" class="hero-cta solid" style="margin-top:14px;">Выбрать услугу →</a>
   </div>
 </section>
 
