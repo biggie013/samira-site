@@ -651,6 +651,13 @@
   .form-actions .submit-btn{ flex:1 1 220px; margin-top:0; padding:18px 14px; }
   .form-status{ margin:4px 0 0; font-size:15px; line-height:1.5; color:var(--ink); }
   .form-status[data-kind="error"]{ color:#FFB4A8; }
+  .contact-alt{ margin:2px 0 0; font-size:14px; line-height:1.5; color:var(--ink-faint); }
+  /* the MAX link: a soft lavender-to-white underline that sweeps across on hover */
+  .contact-alt a{ position:relative; color:var(--ink); font-weight:600; text-decoration:none; padding-bottom:3px;
+    background-image:linear-gradient(90deg, #A99BE8, #FFFFFF), linear-gradient(90deg, rgba(255,255,255,0.28), rgba(255,255,255,0.28));
+    background-size:100% 1.5px, 100% 1.5px; background-position:0 100%, 0 100%; background-repeat:no-repeat;
+    transition:background-size .45s cubic-bezier(.2,.7,.2,1), color .3s ease; }
+  .contact-alt a:hover{ color:#A99BE8; background-size:0% 1.5px, 100% 1.5px; background-position:100% 100%, 0 100%; }
 
   /* Location / map */
   .location{border:1px solid var(--line); border-radius:20px; overflow:hidden; background:var(--bg-2);}
@@ -1585,10 +1592,12 @@
         <label class="consent"><input type="checkbox" name="pd_consent" required> <span>Согласен на <a href="soglasie.html" target="_blank" rel="noopener">обработку персональных данных</a></span></label>
         <label class="consent"><input type="checkbox" name="policy_ack" required> <span>Ознакомлен с <a href="privacy.html" target="_blank" rel="noopener">политикой конфиденциальности</a></span></label>
         <div class="form-actions">
-          <button type="submit" class="submit-btn" name="via" value="max">Записаться через MAX</button>
+          <button type="submit" class="submit-btn" name="via" value="whatsapp">Записаться через WhatsApp</button>
           <button type="submit" class="submit-btn" name="via" value="telegram">Записаться через Telegram</button>
         </div>
         <p class="form-status" role="status" aria-live="polite" hidden></p>
+        <!-- a plain link, not part of the form: the request is not sent anywhere through MAX -->
+        <p class="contact-alt">Удобнее в MAX? <a href="https://max.ru/u/f9LHodD0cOJnBRcjopvA_0J0WimdLEPypGrrhuDkWYJNb5JSMAEJdhPzCuM" target="_blank" rel="noopener noreferrer">Написать нам в MAX</a></p>
       </form>
   </div>
 </section>
@@ -2023,15 +2032,12 @@ document.querySelectorAll('.faq-q').forEach(btn=>{
 });
 
 /* Booking form: no server. After checking the name, the phone and both consent ticks, it opens
-   the owner's chat in the messenger the visitor picked (MAX or Telegram); the request text is
-   typed in where the messenger allows it and always copied, so the visitor can paste and send it
-   themselves. The site stores and sends nothing. */
+   the owner's chat in the messenger the visitor picked (WhatsApp or Telegram) with the request
+   already typed in — the visitor sends it themselves. The site stores and sends nothing. */
 const BOOKING_PHONE = '+7 988 667-99-99';
 const BOOKING_CHATS = {
-  // MAX documents no way to prefill a message in a profile link; the text parameter is passed in
-  // case the app honours it (like Telegram's), and the request is always copied as a fallback
-  max: { label: 'MAX', url: text => 'https://max.ru/u/f9LHodD0cOJnBRcjopvA_0J0WimdLEPypGrrhuDkWYJNb5JSMAEJdhPzCuM?text=' + encodeURIComponent(text) },
-  telegram: { label: 'Telegram', url: text => 'https://t.me/samira_mager?text=' + encodeURIComponent(text) }
+  whatsapp: text => 'https://wa.me/79886679999?text=' + encodeURIComponent(text),
+  telegram: text => 'https://t.me/samira_mager?text=' + encodeURIComponent(text)
 };
 
 function handleContactSubmit(e){
@@ -2052,31 +2058,27 @@ function handleContactSubmit(e){
     say('Отметьте обе галочки согласия.', 'error'); return false;
   }
 
-  const via = (e.submitter && e.submitter.value === 'telegram') ? 'telegram' : 'max';
-  const chatInfo = BOOKING_CHATS[via];
+  const via = (e.submitter && e.submitter.value === 'telegram') ? 'telegram' : 'whatsapp';
   const text = 'Здравствуйте! Хочу записаться. Имя: ' + name + ', телефон: ' + phone;
-  const url = chatInfo.url(text);
   // no 'noopener' feature here: with it window.open always returns null, hiding a real block
-  const chat = window.open(url, '_blank');
+  const chat = window.open(BOOKING_CHATS[via](text), '_blank');
   if(chat) chat.opener = null;
 
-  let copied = false;
-  if(navigator.clipboard){ copied = true; navigator.clipboard.writeText(text).catch(() => {}); }
-  if(via === 'max'){
-    say(copied
-      ? 'Открываем MAX. Если текст не подставился сам, вставьте его в чат — он уже скопирован. Отправьте сообщение, и мы перезвоним.'
-      : 'Открываем MAX. Напишите в чате: «' + text + '» — и мы перезвоним.');
-  } else {
+  if(via === 'telegram' && navigator.clipboard){
+    // not every Telegram app fills the text in from a link, so it is copied as well
+    navigator.clipboard.writeText(text).catch(() => {});
     say('Открываем Telegram. Если текст не подставился сам, вставьте его в чат — он уже скопирован. Отправьте сообщение, и мы перезвоним.');
+  } else {
+    say('Открываем ' + (via === 'telegram' ? 'Telegram' : 'WhatsApp') + '. Отправьте сообщение в чате, и мы перезвоним.');
   }
   if(chat === null){
     // a blocked pop-up: give the link to tap instead
     status.textContent = '';
     const link = document.createElement('a');
-    link.href = url;
+    link.href = BOOKING_CHATS[via](text);
     link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.textContent = 'Открыть чат в ' + chatInfo.label;
+    link.rel = 'noopener';
+    link.textContent = 'Открыть чат в ' + (via === 'telegram' ? 'Telegram' : 'WhatsApp');
     link.style.textDecoration = 'underline';
     status.append('Нажмите, чтобы написать нам: ', link);
     return false;
