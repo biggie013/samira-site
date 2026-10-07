@@ -296,6 +296,11 @@
   .card-face{ position:absolute; inset:0; backface-visibility:hidden; display:flex; flex-direction:column; box-sizing:border-box; border-radius:20px; overflow:hidden; }
   .card-face-back{ transform:rotateY(180deg); background:#000; border:1px solid var(--line); padding:32px; justify-content:center; overflow:hidden; visibility:hidden; }
   .card-flip:hover .card-face-back, .card-flip.flipped .card-face-back{ visibility:visible; }
+  /* tapped (flipped) card: the front is hidden once the turn passes its midpoint, so its badge and SM
+     watermark — which sit on their own layers and can ignore backface-visibility on phones — never
+     show through mirrored. Both faces swap at the same moment in either direction. */
+  .card-face-front, .card-face-back{ transition:visibility 0s linear .4s; }
+  .card-flip.flipped .card-face-front{ visibility:hidden; }
   .card-back-photo{
     position:absolute; inset:0;
     background-color:#000;
