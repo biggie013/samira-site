@@ -651,6 +651,8 @@
   .form-actions .submit-btn{ flex:1 1 220px; margin-top:0; padding:18px 14px; }
   .form-status{ margin:4px 0 0; font-size:15px; line-height:1.5; color:var(--ink); }
   .form-status[data-kind="error"]{ color:#FFB4A8; }
+  .contact-alt{ margin:2px 0 0; font-size:14px; line-height:1.5; color:var(--ink-faint); }
+  .contact-alt a{ color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
 
   /* Location / map */
   .location{border:1px solid var(--line); border-radius:20px; overflow:hidden; background:var(--bg-2);}
@@ -724,6 +726,8 @@
   .socials a[aria-label="WhatsApp"]:hover{ background:#7FAE86; border-color:#7FAE86; color:#241509; }
   .socials a[aria-label="Telegram"]{ color:#7EB6E0; border-color:rgba(126,182,224,0.35); }
   .socials a[aria-label="Telegram"]:hover{ background:#7EB6E0; border-color:#7EB6E0; color:#0D0B0A; }
+  .socials a[aria-label="MAX"]{ color:#A99BE8; border-color:rgba(169,155,232,0.35); font-size:10px; letter-spacing:0.02em; }
+  .socials a[aria-label="MAX"]:hover{ background:#A99BE8; border-color:#A99BE8; color:#0D0B0A; }
   .footer-bottom{ margin-top:54px; padding-top:28px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:12.5px; color:var(--ink-faint); }
 
   .footer-doc-link{border-bottom:1px solid rgba(255,255,255,0.3); transition:color .25s, border-color .25s;}
@@ -1587,6 +1591,8 @@
           <button type="submit" class="submit-btn" name="via" value="telegram">Записаться через Telegram</button>
         </div>
         <p class="form-status" role="status" aria-live="polite" hidden></p>
+        <!-- a plain link, not part of the form: the request is not sent anywhere through MAX -->
+        <p class="contact-alt">Удобнее в MAX? <a href="https://max.ru/u/f9LHodD0cOJnBRcjopvA_0J0WimdLEPypGrrhuDkWYJNb5JSMAEJdhPzCuM" target="_blank" rel="noopener noreferrer">Написать нам в MAX</a></p>
       </form>
   </div>
 </section>
@@ -1727,6 +1733,7 @@
           <a href="https://www.instagram.com/samira_mageramova?igsh=a29mdnc4bXRqajly" target="_blank" rel="noopener" aria-label="Instagram">IG*</a>
           <a href="https://api.whatsapp.com/send?phone=79886679999&utm_source=ig&utm_medium=social&utm_content=link_in_bio" target="_blank" rel="noopener" aria-label="WhatsApp">WA</a>
           <a href="https://t.me/samira_mager" target="_blank" rel="noopener" aria-label="Telegram">TG</a>
+          <a href="https://max.ru/u/f9LHodD0cOJnBRcjopvA_0J0WimdLEPypGrrhuDkWYJNb5JSMAEJdhPzCuM" target="_blank" rel="noopener noreferrer" aria-label="MAX">MAX</a>
         </div>
       </div>
       <div class="footer-col">
@@ -1814,6 +1821,7 @@
         <a href="https://www.instagram.com/samira_mageramova?igsh=a29mdnc4bXRqajly" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
         <a href="https://api.whatsapp.com/send?phone=79886679999&utm_source=ig&utm_medium=social&utm_content=link_in_bio" target="_blank" rel="noopener" aria-label="WhatsApp">WA</a>
         <a href="https://t.me/samira_mager" target="_blank" rel="noopener" aria-label="Telegram">TG</a>
+        <a href="https://max.ru/u/f9LHodD0cOJnBRcjopvA_0J0WimdLEPypGrrhuDkWYJNb5JSMAEJdhPzCuM" target="_blank" rel="noopener noreferrer" aria-label="MAX">MAX</a>
       </div>
     </div>
   </div>
