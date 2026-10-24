@@ -517,19 +517,29 @@
     .removal-cta{margin-top:20px;}
   }
   #blog{padding-bottom:34px;}
-  #healed-works{position:relative; background:#2a2a2a; padding:0;}
-  .healed-head{padding:126px 32px 0; text-align:center;}
+  #healed-works{position:relative; background:#2a2a2a; padding:110px 0;}
+  .healed-head{padding:0 32px; text-align:center;}
   .healed-head .eyebrow{justify-content:center;}
   .healed-head h2{font-size:clamp(26px,3.4vw,40px); margin-top:10px;}
-  .healed-pin{position:sticky; top:0; height:100vh; margin-top:-126px; box-sizing:border-box; overflow:hidden; display:flex; flex-direction:column;}
-  .healed-viewport{flex:1; overflow:hidden; width:100%; display:flex; align-items:center;}
-  .healed-track{display:flex; align-items:flex-start; gap:18px; padding:0 4vw; will-change:transform;}
-  .healed-item{position:relative; flex:0 0 auto; height:52vh; width:min(44vw,560px); overflow:hidden; border-radius:20px; background:var(--bg-3); border:1px solid var(--line);}
-  .healed-item img{width:100%; height:100%; object-fit:cover; filter:grayscale(0.2); transition:transform 1.4s cubic-bezier(.2,.7,.2,1), filter .6s ease;}
+  /* a plain horizontal carousel: swipe / trackpad / drag / arrows, photos snap one at a time */
+  .healed-pin{position:relative; margin-top:40px;}
+  .healed-viewport{overflow-x:auto; overflow-y:hidden; scroll-snap-type:x mandatory; scrollbar-width:none; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; cursor:grab;}
+  .healed-viewport::-webkit-scrollbar{display:none;}
+  .healed-viewport:focus-visible{outline:1px solid #fff; outline-offset:-1px;}
+  .healed-viewport.is-dragging{cursor:grabbing; scroll-snap-type:none; user-select:none;}
+  .healed-track{display:flex; align-items:flex-start; gap:18px; padding:0 4vw; width:max-content;}
+  .healed-item{position:relative; flex:0 0 auto; height:52vh; width:min(44vw,560px); overflow:hidden; border-radius:20px; background:var(--bg-3); border:1px solid var(--line); scroll-snap-align:center;}
+  .healed-item img{width:100%; height:100%; object-fit:cover; filter:grayscale(0.2); transition:transform 1.4s cubic-bezier(.2,.7,.2,1), filter .6s ease; -webkit-user-drag:none; pointer-events:none;}
   .healed-item:hover img{transform:scale(1.04); filter:grayscale(0);}
+  /* the arrows float over the edges, like the other carousels on phones */
+  .healed-btn{position:absolute; top:50%; transform:translateY(-50%); z-index:3; background:rgba(23,23,23,0.82); transition:opacity .25s ease, border-color .25s;}
+  .healed-btn--prev{left:2vw;}
+  .healed-btn--next{right:2vw;}
+  .healed-btn[disabled]{opacity:0; pointer-events:none;}
   @media(max-width:760px){
-    .healed-pin{margin-top:-98px;}
-    .healed-head{padding:98px 20px 0;}
+    #healed-works{padding:78px 0;}
+    .healed-head{padding:0 20px;}
+    .healed-pin{margin-top:28px;}
     .healed-track{gap:10px; padding:0 5vw;}
     .healed-item{height:46vh; width:74vw; border-radius:14px;}
   }
@@ -545,6 +555,8 @@
   .reviews-stage .review-mark{font-size:38px;}
   .reviews-stage .review-text{font-size:16px; line-height:1.5; margin-top:12px; overflow:hidden;}
   .reviews-stage .review-name{margin-top:14px; padding-top:12px;}
+  .reviews-cta{ display:flex; justify-content:center; margin-top:40px; }
+  .reviews-cta .hero-cta{ margin-top:0; }
   .reviews-hint{ margin-top:48px; text-align:center; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-faint); }
   .catalog-hint{ margin-top:26px; text-align:center; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-faint); }
   @media(max-width:600px){ .catalog-hint{ font-size:10px; letter-spacing:0.12em; margin-top:18px; } }
@@ -1503,8 +1515,10 @@
     <div class="eyebrow">Результаты</div>
     <h2>Зажившие работы</h2>
   </div>
+  <!-- an ordinary swipe carousel: the page scrolls past it normally; arrows, drag and touch move it -->
   <div class="healed-pin">
-    <div class="healed-viewport">
+    <button class="car-btn healed-btn healed-btn--prev" type="button" aria-label="Назад"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="healed-viewport" id="healedViewport" tabindex="0" aria-label="Зажившие работы — листайте влево и вправо">
       <div class="healed-track" id="healedTrack">
         <div class="healed-item"><img id="healed-img-1" loading="lazy" decoding="async" alt="Зажившая работа — перманентный макияж губ"></div>
         <div class="healed-item"><img id="healed-img-2" loading="lazy" decoding="async" alt="Зажившая работа — перманентный макияж бровей"></div>
@@ -1512,6 +1526,7 @@
         <div class="healed-item"><img id="healed-img-4" loading="lazy" decoding="async" alt="Зажившая работа — перманентный макияж губ"></div>
       </div>
     </div>
+    <button class="car-btn healed-btn healed-btn--next" type="button" aria-label="Вперёд"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
   </div>
 </section>
 
@@ -1724,6 +1739,8 @@
       <button class="car-btn" onclick="spinReviews(1)" aria-label="Вперёд"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
     <div class="reviews-hint">потяните, чтобы листать · зажмите, чтобы остановить</div>
+    <!-- the same button as in "Обо мне", repeated at the end of the page -->
+    <div class="reviews-cta"><a href="#contact" class="hero-cta solid">Записаться на консультацию</a></div>
   </div>
 </section>
 
@@ -2293,7 +2310,19 @@ let spinReviews = function(){};
   let moved = 0;
   const SPEED = -10;      // degrees per second, matches the reference site
 
+  // every card takes the height of the longest review, so no text is ever cut off;
+  // the stage grows with it (CSS keeps its height as the minimum)
+  function fitHeights(){
+    cards.forEach(c => { c.style.height = 'auto'; c.style.marginTop = ''; });
+    stage.style.height = '';
+    const tallest = Math.ceil(Math.max.apply(null, cards.map(c => c.offsetHeight)));
+    cards.forEach(c => { c.style.height = tallest + 'px'; c.style.marginTop = (-tallest / 2) + 'px'; });
+    const minStage = stage.offsetHeight;
+    stage.style.height = Math.max(minStage, tallest + 60) + 'px';
+  }
+
   function layout(){
+    fitHeights();
     const cardW = cards[0].offsetWidth;
     // keep neighbouring cards from overlapping, then add breathing room
     const minRadius = (cardW / 2) / Math.tan((step / 2) * Math.PI / 180);
@@ -2359,6 +2388,8 @@ let spinReviews = function(){};
 
   layout();
   window.addEventListener('resize', layout);
+  // the review font arrives a moment later and changes the text height
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
   requestAnimationFrame(tick);
 })();
 
@@ -2492,43 +2523,72 @@ document.getElementById('removal-img-3').src = IMG_REMOVAL3;
 document.querySelectorAll('.lp-part').forEach(el => { el.src = IMG_LEOPARD; });
 if(window.__startLeopardRun) window.__startLeopardRun();   // begins once the artwork decodes
 
-function initHealedScroll(){
-  const wrap = document.getElementById('healed-works');
-  const track = document.getElementById('healedTrack');
-  if(!wrap || !track) return;
-  const viewport = track.parentElement;
-  const pinEl = wrap.querySelector('.healed-pin');
-  let maxTranslate = 0;
-  let pinOffset = 0;
+/* Healed works: a plain horizontal carousel. Touch and trackpads scroll it natively (photos snap
+   one at a time); a mouse can drag it; the arrows step one photo. The page's own vertical scroll
+   passes straight through. */
+function initHealedCarousel(){
+  const view = document.getElementById('healedViewport');
+  if(!view) return;
+  const pin = view.parentElement;
+  const prev = pin.querySelector('.healed-btn--prev');
+  const next = pin.querySelector('.healed-btn--next');
+  const items = () => Array.prototype.slice.call(view.querySelectorAll('.healed-item'));
 
-  function measure(){
-    const trackWidth = track.scrollWidth;
-    const viewportWidth = viewport.clientWidth;
-    maxTranslate = Math.max(0, trackWidth - viewportWidth);
-    wrap.style.height = 'auto';
-    pinOffset = pinEl.offsetTop;
-    wrap.style.height = (pinOffset + window.innerHeight + maxTranslate) + 'px';
+  // one step = one photo plus the gap
+  function step(){
+    const list = items();
+    if(list.length < 2) return view.clientWidth;
+    return list[1].getBoundingClientRect().left - list[0].getBoundingClientRect().left;
   }
-
-  function onScroll(){
-    if(maxTranslate <= 0){ track.style.transform = 'translateX(0)'; return; }
-    const rect = wrap.getBoundingClientRect();
-    const progress = Math.min(1, Math.max(0, (-rect.top - pinOffset) / maxTranslate));
-    track.style.transform = `translateX(-${progress * maxTranslate}px)`;
+  function updateArrows(){
+    const max = view.scrollWidth - view.clientWidth;
+    prev.disabled = view.scrollLeft <= 2;
+    next.disabled = view.scrollLeft >= max - 2;
   }
-
-  measure();
-  onScroll();
-  window.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', ()=>{ measure(); onScroll(); });
-
-  track.querySelectorAll('img').forEach(img=>{
-    if(!img.complete){
-      img.addEventListener('load', ()=>{ measure(); onScroll(); });
-    }
+  prev.addEventListener('click', () => view.scrollBy({left: -step(), behavior: 'smooth'}));
+  next.addEventListener('click', () => view.scrollBy({left: step(), behavior: 'smooth'}));
+  view.addEventListener('scroll', updateArrows, {passive: true});
+  window.addEventListener('resize', updateArrows);
+  view.addEventListener('keydown', e => {
+    if(e.key === 'ArrowRight'){ e.preventDefault(); next.click(); }
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); prev.click(); }
   });
+
+  // mouse drag (touch already scrolls natively); snapping is paused while dragging
+  let dragging = false, startX = 0, startLeft = 0, moved = 0;
+  view.addEventListener('pointerdown', e => {
+    if(e.pointerType !== 'mouse' || e.button !== 0) return;
+    dragging = true; moved = 0; startX = e.clientX; startLeft = view.scrollLeft;
+    view.classList.add('is-dragging');
+    view.setPointerCapture(e.pointerId);
+  });
+  view.addEventListener('pointermove', e => {
+    if(!dragging) return;
+    const dx = e.clientX - startX;
+    moved = Math.max(moved, Math.abs(dx));
+    view.scrollLeft = startLeft - dx;
+  });
+  function endDrag(e){
+    if(!dragging) return;
+    dragging = false;
+    try{ view.releasePointerCapture(e.pointerId); }catch(_){}
+    // settle on the nearest photo before handing control back to scroll-snap
+    const s = step();
+    const target = Math.round(view.scrollLeft / s) * s;
+    view.classList.remove('is-dragging');
+    view.scrollTo({left: target, behavior: 'smooth'});
+  }
+  view.addEventListener('pointerup', endDrag);
+  view.addEventListener('pointercancel', endDrag);
+  view.addEventListener('dragstart', e => e.preventDefault());
+
+  items().forEach(item => {
+    const img = item.querySelector('img');
+    if(img && !img.complete) img.addEventListener('load', updateArrows);
+  });
+  updateArrows();
 }
-initHealedScroll();
+initHealedCarousel();
 
 document.querySelectorAll('.procedure-slide.reveal').forEach(el=>{
   el.classList.add('pre-reveal');
